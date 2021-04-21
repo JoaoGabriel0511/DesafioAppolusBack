@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/DesafioAppolusBack.iml" filepath="$PROJECT_DIR$/.idea/DesafioAppolusBack.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../react/desafio-appolus-front/.idea/desafio-appolus-front.iml" filepath="$PROJECT_DIR$/../../react/desafio-appolus-front/.idea/desafio-appolus-front.iml" />
     </modules>
   </component>
 </project>
