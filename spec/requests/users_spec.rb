@@ -11,17 +11,17 @@ RSpec.describe "Users", type: :request do
     end
 
     it "return http success and the updated user data when the token is valid" do
-      put '/api/v1/user', params: { user: {name: 'joe', email: 'joe@email.com', password: '12345679', password_confirmation: '12345679' }}, headers: {"Authorization"  => @token}
+      put '/api/v1/user', params: { user: { name: 'joe', email: 'joe@email.com', password: '12345679', password_confirmation: '12345679' }}, headers: { "Authorization"  => @token}
       data = JSON.parse(response.body)["data"]
       message = JSON.parse(response.body)["message"]
       expect(response).to have_http_status(:success)
-      expect(data["name"]).to eq 'joe'
-      expect(data["email"]).to eq 'joe@email.com'
+      expect(data["user"]["name"]).to eq 'joe'
+      expect(data["user"]["email"]).to eq 'joe@email.com'
       expect(message).to eq 'user updated'
     end
 
     it "return http success and the updated user data when the token is valid" do
-      put '/api/v1/user', params: { user: {email: 'joeemail.com', password: '12345679', password_confirmation: '123456' }}, headers: {"Authorization"  => @token}
+      put '/api/v1/user', params: { user: { email: 'joeemail.com', password: '12345679', password_confirmation: '123456' }}, headers: { "Authorization"  => @token}
       errors = JSON.parse(response.body)["errors"]
       message = JSON.parse(response.body)["message"]
       expect(response).to have_http_status(:unprocessable_entity)
@@ -31,7 +31,7 @@ RSpec.describe "Users", type: :request do
     end
 
     it "return http unauthorized if no token is set on header" do
-      put '/api/v1/user', params: { user: {name: 'joe', email: 'joe@email.com', password: '12345679', password_confirmation: '12345679' }}
+      put '/api/v1/user', params: { user: { name: 'joe', email: 'joe@email.com', password: '12345679', password_confirmation: '12345679' }}
       expect(response).to have_http_status(:unauthorized)
     end
 
@@ -49,18 +49,8 @@ RSpec.describe "Users", type: :request do
       expect(response).to have_http_status(:success)
       data = JSON.parse(response.body)["data"]
       message = JSON.parse(response.body)["message"]
-      expect(data["name"]).to eq "jhon"
-      expect(data["email"]).to eq "jhon@email.com"
-      expect(message).to eq "user deleted"
-    end
-
-    it "returns http success with the deleted user data when the token is valid" do
-      delete '/api/v1/user', headers: {"Authorization"  => @token}
-      expect(response).to have_http_status(:success)
-      data = JSON.parse(response.body)["data"]
-      message = JSON.parse(response.body)["message"]
-      expect(data["name"]).to eq "jhon"
-      expect(data["email"]).to eq "jhon@email.com"
+      expect(data["user"]["name"]).to eq "jhon"
+      expect(data["user"]["email"]).to eq "jhon@email.com"
       expect(message).to eq "user deleted"
     end
 

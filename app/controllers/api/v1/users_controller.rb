@@ -4,22 +4,22 @@ class Api::V1::UsersController < ApiController
   before_action :set_user
 
   def update
-    if @user.update(user_params)
-      render json: { message: "user updated", data: @user }, status: :ok
+    if @userAccount[:user].update(user_params)
+      render json: { message: "user updated", data: {user: @userAccount[:user]} }, status: :ok
     else
-      render json: { message: "user not updated", errors: @user.errors}, status: :unprocessable_entity
+      render json: { message: "user not updated", errors: @userAccount[:user].errors}, status: :unprocessable_entity
     end
   end
 
   def destroy
-    @user.destroy
-    render json: {message: "user deleted", data: @user}, status: :ok
+    @userAccount[:user].destroy
+    render json: {message: "user deleted", data: {user: @userAccount[:user], account: @userAccount[:account]}}, status: :ok
   end
 
   private
 
     def set_user
-      @user = helpers.recoverCurrentUser(request)
+      @userAccount = helpers.recoverCurrentUserAccount(request)
     end
 
     def user_params

@@ -5,7 +5,8 @@ RSpec.describe "Account", type: :request do
   describe 'Get /index' do
 
     before do
-      User.create(name: "jhon", email: "jhon@email.com", password: "12345678", password_confirmation: "12345678")
+      user = User.create(name: "jhon", email: "jhon@email.com", password: "12345678", password_confirmation: "12345678")
+      Account.create(user_id: user.id)
       post '/api/v1/auth', params: {email: "jhon@email.com", password: "12345678"}
       @token = JSON.parse(response.body)["token"]
     end
@@ -15,8 +16,9 @@ RSpec.describe "Account", type: :request do
       data = JSON.parse(response.body)["data"]
       message = JSON.parse(response.body)["message"]
       expect(response).to have_http_status(:success)
-      expect(data["name"]).to eq 'jhon'
-      expect(data["email"]).to eq 'jhon@email.com'
+      expect(data["user"]["name"]).to eq 'jhon'
+      expect(data["user"]["email"]).to eq 'jhon@email.com'
+      expect(data["account"]["balance"]).to eq 0.0
       expect(message).to eq 'user jhon@email.com retrieved'
     end
 

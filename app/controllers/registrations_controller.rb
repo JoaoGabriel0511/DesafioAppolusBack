@@ -5,7 +5,7 @@ class RegistrationsController < Devise::RegistrationsController
     @user = User.new(sign_up_params)
     if @user.save
       account = Account.create(user_id: @user.id)
-      render json: { message: "user created", data: {user: @user, account: account} }, status: :ok
+      render json: { message: "user created", data: { user: @user, account: account } }, status: :ok
     else
       render json: { message: "user not created", errors: @user.errors}, status: :unprocessable_entity
     end
