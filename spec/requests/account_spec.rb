@@ -34,6 +34,10 @@ RSpec.describe "Account", type: :request do
       data = JSON.parse(response.body)["data"]
       message = JSON.parse(response.body)["message"]
       expect(data["account"]["balance"]).to eq 600.0
+      expect(data["transaction"]["balance"]).to eq 600.0
+      expect(data["transaction"]["transaction_type"]).to eq "DEPOSIT"
+      expect(data["transaction"]["value"]).to eq 100.0
+      expect(data["transaction"]["account_id"]).to eq @account.id
       expect(message).to eq 'Deposit made to account'
     end
 
@@ -44,6 +48,10 @@ RSpec.describe "Account", type: :request do
       data = JSON.parse(response.body)["data"]
       message = JSON.parse(response.body)["message"]
       expect(data["account"]["balance"]).to eq 400.0
+      expect(data["transaction"]["balance"]).to eq 400.0
+      expect(data["transaction"]["transaction_type"]).to eq "WITHDRAW"
+      expect(data["transaction"]["value"]).to eq 100.0
+      expect(data["transaction"]["account_id"]).to eq @account.id
       expect(message).to eq 'Withdraw made from account'
     end
 
