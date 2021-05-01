@@ -10,14 +10,16 @@ class Api::V1::AccountController < ApiController
     value = deposit_parms[:value].to_f
     @userAccount[:account].deposit(value)
     @userAccount[:account].save
-    render json: {data: {account: @userAccount[:account]}, message: "Deposit made to account"}, status: :ok
+    transaction = Transaction.create(transaction_type: Transaction.transaction_types[:DEPOSIT], account_id: @userAccount[:account].id, value: value, balance: @userAccount[:account].balance)
+    render json: {data: {account: @userAccount[:account], transaction: transaction}, message: "Deposit made to account"}, status: :ok
   end
 
   def withdraw
     value = withdraw_parms[:value].to_f
     @userAccount[:account].withdraw(value)
     if @userAccount[:account].save
-      render json: {data: {account: @userAccount[:account]}, message: "Withdraw made from account"}, status: :ok
+      transaction = Transaction.create(transaction_type: Transaction.transaction_types[:WITHDRAW], account_id: @userAccount[:account].id, value: value, balance: @userAccount[:account].balance)
+      render json: {data: {account: @userAccount[:account], transaction: transaction}, message: "Withdraw made from account"}, status: :ok
     else
       render json: {error: "User can`t withdraw a value greater than the balance"}, status: :not_acceptable
     end
