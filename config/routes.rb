@@ -8,6 +8,7 @@ Rails.application.routes.draw do
       resource :user, only: [:update, :destroy]
       get  '/auth' => 'authentication#fetch'
       get '/account' => 'account#index'
+      post '/account/deposit' => 'account#deposit'
     end
   end
 end
