@@ -25,6 +25,11 @@ class Api::V1::AccountController < ApiController
     end
   end
 
+  def account_statement
+    account_statement = Transaction.where(account_id: @userAccount[:account].id)
+    render json: {data: {account_statement: account_statement}, message: "Account statement recovered"}, status: :ok
+  end
+
   private
     def set_user
       @userAccount = helpers.recoverCurrentUserAccount(request)

@@ -10,6 +10,7 @@ Rails.application.routes.draw do
       get '/account' => 'account#index'
       post '/account/deposit' => 'account#deposit'
       post '/account/withdraw' => 'account#withdraw'
+      get 'account/statement' => 'account#account_statement'
     end
   end
 end

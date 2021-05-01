@@ -78,6 +78,8 @@ GEM
     ffi (1.15.0)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
+    groupdate (2.5.3)
+      activesupport (>= 3)
     i18n (1.8.10)
       concurrent-ruby (~> 1.0)
     jwt (2.2.2)
@@ -182,6 +184,7 @@ DEPENDENCIES
   bootsnap (>= 1.4.4)
   byebug
   devise
+  groupdate (~> 2.5, >= 2.5.2)
   jwt
   listen (~> 3.3)
   pg (~> 1.1)
