@@ -19,14 +19,14 @@ RSpec.describe "Authentication", type: :request do
       post '/api/v1/auth', params: {email: "joe@email.com", password: "12345678"}
       data = JSON.parse(response.body)
       expect(response).to have_http_status(:unauthorized)
-      expect(data["errors"]).to eq "invalid login"
+      expect(data["errors"]).to eq "invalid email or password"
     end
 
     it "return http status unauthorized when the password does not match" do
       post '/api/v1/auth', params: {email: "jhon@email.com", password: "12345679"}
       data = JSON.parse(response.body)
       expect(response).to have_http_status(:unauthorized)
-      expect(data["errors"]).to eq "invalid login"
+      expect(data["errors"]).to eq "invalid email or password"
     end
 
   end
