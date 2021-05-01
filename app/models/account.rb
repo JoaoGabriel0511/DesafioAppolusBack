@@ -6,4 +6,8 @@ class Account < ApplicationRecord
   def deposit(value)
     self.balance += value
   end
+
+  def withdraw(value)
+    self.balance -= value
+  end
 end

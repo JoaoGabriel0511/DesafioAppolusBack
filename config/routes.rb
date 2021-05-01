@@ -9,6 +9,7 @@ Rails.application.routes.draw do
       get  '/auth' => 'authentication#fetch'
       get '/account' => 'account#index'
       post '/account/deposit' => 'account#deposit'
+      post '/account/withdraw' => 'account#withdraw'
     end
   end
 end
