@@ -7,6 +7,13 @@ RSpec.describe "Account", type: :request do
     before do
       user = User.create(name: "jhon", email: "jhon@email.com", password: "12345678", password_confirmation: "12345678")
       @account = Account.create(user_id: user.id, balance: 500.0)
+      10.times do |it|
+        if(it.odd?)
+          Transaction.create(transaction_type: Transaction.transaction_types[:WITHDRAW], account_id: @account.id, value: 0.0, balance: @account.balance)
+        else
+          Transaction.create(transaction_type: Transaction.transaction_types[:DEPOSIT], account_id: @account.id, value: 0.0, balance: @account.balance)
+        end
+      end
       post '/api/v1/auth', params: {email: "jhon@email.com", password: "12345678"}
       @token = JSON.parse(response.body)["token"]
     end
@@ -53,6 +60,13 @@ RSpec.describe "Account", type: :request do
       expect(data["transaction"]["value"]).to eq 100.0
       expect(data["transaction"]["account_id"]).to eq @account.id
       expect(message).to eq 'Withdraw made from account'
+    end
+
+    it "recovers the account statement" do
+      get '/api/v1/account/statement', headers: {"Authorization" => @token}
+      expect(response).to have_http_status(:success)
+      data = JSON.parse(response.body)["data"]
+      expect(data["account_statement"]).to have_attributes(size: 10)
     end
 
     it "return a error message when it tries to withdraw a value greater then the balance" do
