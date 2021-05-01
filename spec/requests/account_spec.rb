@@ -6,7 +6,7 @@ RSpec.describe "Account", type: :request do
 
     before do
       user = User.create(name: "jhon", email: "jhon@email.com", password: "12345678", password_confirmation: "12345678")
-      Account.create(user_id: user.id)
+      @account = Account.create(user_id: user.id)
       post '/api/v1/auth', params: {email: "jhon@email.com", password: "12345678"}
       @token = JSON.parse(response.body)["token"]
     end
@@ -25,6 +25,16 @@ RSpec.describe "Account", type: :request do
     it "return http success and the user data when the token is valid" do
       get '/api/v1/account'
       expect(response).to have_http_status(:unauthorized)
+    end
+
+    it "deposits values to the account balance" do
+      expect(@account.balance).to eq(0.0)
+      post '/api/v1/account/deposit', headers: {"Authorization"  => @token}, params: {deposit: {value: 1.0}}
+      expect(response).to have_http_status(:success)
+      data = JSON.parse(response.body)["data"]
+      message = JSON.parse(response.body)["message"]
+      expect(data["account"]["balance"]).to eq 1.0
+      expect(message).to eq 'Deposit made to account'
     end
 
   end
