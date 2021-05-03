@@ -26,7 +26,7 @@ class Api::V1::AccountController < ApiController
   end
 
   def account_statement
-    account_statement = Transaction.where(account_id: @userAccount[:account].id)
+    account_statement = Transaction.where(account_id: @userAccount[:account].id).order('transactions.created_at')
     render json: {data: {account_statement: account_statement}, message: "Account statement recovered"}, status: :ok
   end
 
