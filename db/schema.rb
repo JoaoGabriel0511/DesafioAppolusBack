@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_05_235847) do
+ActiveRecord::Schema.define(version: 2021_05_07_185019) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,6 +20,16 @@ ActiveRecord::Schema.define(version: 2021_05_05_235847) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "user_id"
+  end
+
+  create_table "investments", force: :cascade do |t|
+    t.float "value", default: 0.0
+    t.bigint "user_id", null: false
+    t.bigint "trust_fund_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["trust_fund_id"], name: "index_investments_on_trust_fund_id"
+    t.index ["user_id"], name: "index_investments_on_user_id"
   end
 
   create_table "transactions", force: :cascade do |t|
@@ -55,6 +65,8 @@ ActiveRecord::Schema.define(version: 2021_05_05_235847) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "investments", "trust_funds"
+  add_foreign_key "investments", "users"
   add_foreign_key "transactions", "accounts"
   add_foreign_key "trust_funds", "users"
 end
