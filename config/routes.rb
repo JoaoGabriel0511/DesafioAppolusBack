@@ -11,6 +11,8 @@ Rails.application.routes.draw do
       post '/account/deposit' => 'account#deposit'
       post '/account/withdraw' => 'account#withdraw'
       get 'account/statement' => 'account#account_statement'
+      get '/trust_funds' => 'trust_fund#index'
+      post '/trust_fund' => 'trust_fund#create'
     end
   end
 end
