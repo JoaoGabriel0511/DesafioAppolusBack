@@ -1,5 +1,6 @@
 class TrustFund < ApplicationRecord
   belongs_to :user
-  validate :name, presence: true
-  validate :fund_type, presence: true
+  validates :name, presence: true
+  validates :fund_type, presence: true
+  enum fund_type: [:STOCK, :FUND, :DIRECT_TREASURY]
 end
