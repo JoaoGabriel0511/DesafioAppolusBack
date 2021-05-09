@@ -13,6 +13,9 @@ Rails.application.routes.draw do
       get 'account/statement' => 'account#account_statement'
       get '/trust_funds' => 'trust_fund#index'
       post '/trust_fund' => 'trust_fund#create'
+      post '/trust_fund/invest' => 'trust_fund#invest_value'
+      post '/trust_fund/withdraw' => 'trust_fund#withdraw_value'
+      get '/account/investments' => 'account#account_investments'
     end
   end
 end
