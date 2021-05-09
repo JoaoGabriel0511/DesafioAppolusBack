@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_07_191258) do
+ActiveRecord::Schema.define(version: 2021_05_09_141030) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,13 +24,13 @@ ActiveRecord::Schema.define(version: 2021_05_07_191258) do
 
   create_table "investments", force: :cascade do |t|
     t.float "value", default: 0.0
-    t.bigint "user_id", null: false
+    t.bigint "account_id", null: false
     t.bigint "trust_fund_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["account_id", "trust_fund_id"], name: "index_investments_on_account_id_and_trust_fund_id", unique: true
+    t.index ["account_id"], name: "index_investments_on_account_id"
     t.index ["trust_fund_id"], name: "index_investments_on_trust_fund_id"
-    t.index ["user_id", "trust_fund_id"], name: "index_investments_on_user_id_and_trust_fund_id", unique: true
-    t.index ["user_id"], name: "index_investments_on_user_id"
   end
 
   create_table "transactions", force: :cascade do |t|
@@ -67,7 +67,7 @@ ActiveRecord::Schema.define(version: 2021_05_07_191258) do
   end
 
   add_foreign_key "investments", "trust_funds"
-  add_foreign_key "investments", "users"
+  add_foreign_key "investments", "users", column: "account_id"
   add_foreign_key "transactions", "accounts"
   add_foreign_key "trust_funds", "users"
 end

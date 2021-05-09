@@ -3,6 +3,7 @@ class Account < ApplicationRecord
   validates :balance, numericality: {greater_than_or_equal_to: 0}
   validates_uniqueness_of :user_id
   has_many :transactions
+  has_many :trust_funds, through: :investments
 
   def deposit(value)
     self.balance += value
