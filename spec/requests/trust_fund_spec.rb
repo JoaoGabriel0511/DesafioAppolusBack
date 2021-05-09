@@ -61,6 +61,11 @@ RSpec.describe "TrustFunds", type: :request do
       expect(data["investment"]["value"]).to eq(40.0)
       expect(data["account"]["id"]).to eq(@account.id)
       expect(data["account"]["balance"]).to eq(460.0)
+      expect(data["transaction"]["account_id"]).to eq(@account.id)
+      expect(data["transaction"]["value"]).to eq(40.0)
+      expect(data["transaction"]["balance"]).to eq(460)
+      expect(data["transaction"]["transaction_type"]).to eq("INVEST")
+      expect(data["transaction"]["trust_fund_id"]).to eq(@trust_fund.id)
     end
 
     it "returns a error message when investment value is greater then the account balance" do
@@ -86,7 +91,7 @@ RSpec.describe "TrustFunds", type: :request do
       @investment = Investment.create(account: @account, trust_fund: @trust_fund, value: 400.0)
     end
 
-    it "creates an investment in a trust fund" do
+    it "withdraws from an investment in a trust fund" do
       post '/api/v1/trust_fund/withdraw', params: {investment: {value: 40.0, trust_fund_id: @trust_fund.id}}, headers: {"Authorization"  => @token}
       data = JSON.parse(response.body)["data"]
       message = JSON.parse(response.body)["message"]
@@ -97,9 +102,14 @@ RSpec.describe "TrustFunds", type: :request do
       expect(data["investment"]["value"]).to eq(360.0)
       expect(data["account"]["id"]).to eq(@account.id)
       expect(data["account"]["balance"]).to eq(540.0)
+      expect(data["transaction"]["account_id"]).to eq(@account.id)
+      expect(data["transaction"]["value"]).to eq(40.0)
+      expect(data["transaction"]["balance"]).to eq(540.0)
+      expect(data["transaction"]["transaction_type"]).to eq("INVEST_WITHDRAWN")
+      expect(data["transaction"]["trust_fund_id"]).to eq(@trust_fund.id)
     end
 
-    it "returns a error message when investment value is greater then the account balance" do
+    it "returns a error message when withdraw value is greater then the investment value" do
       post '/api/v1/trust_fund/withdraw', params: {investment: {value: 440.0, trust_fund_id: @trust_fund.id}}, headers: {"Authorization"  => @token}
       errors = JSON.parse(response.body)["errors"]
       expect(response).to have_http_status(:unprocessable_entity)

@@ -25,7 +25,8 @@ class Api::V1::TrustFundController < ApplicationController
       investment.deposit(params[:investment][:value].to_f)
       if @userAccount[:account].save
         investment.save
-        render json: {data:{ user: @userAccount[:user], account: @userAccount[:account], investment: investment }, message: "value invested"}, status: :ok
+        transaction = Transaction.create!(transaction_type: Transaction.transaction_types[:INVEST], value: params[:investment][:value].to_f, balance: @userAccount[:account].balance, account_id: @userAccount[:account].id, trust_fund_id: params[:investment][:trust_fund_id])
+        render json: {data:{ user: @userAccount[:user], account: @userAccount[:account], investment: investment, transaction: transaction }, message: "value invested"}, status: :ok
       else
         render json: {errors: {value: ["Cant invest greater the user account balance"]}}, status: :unprocessable_entity
       end
@@ -40,7 +41,8 @@ class Api::V1::TrustFundController < ApplicationController
       investment.withdraw(params[:investment][:value].to_f)
       if investment.save
         @userAccount[:account].save
-        render json: {data:{user: @userAccount[:user], account: @userAccount[:account], investment: investment }, message: "value withdrawn"}, status: :ok
+        transaction = Transaction.create!(transaction_type: Transaction.transaction_types[:INVEST_WITHDRAWN], value: params[:investment][:value].to_f, balance: @userAccount[:account].balance, account_id: @userAccount[:account].id, trust_fund_id: params[:investment][:trust_fund_id])
+        render json: {data: {user: @userAccount[:user], account: @userAccount[:account], investment: investment, transaction: transaction }, message: "value withdrawn"}, status: :ok
       else
         render json: {errors: {value: ["Cant withdraw a value greater then the investment value"]}}, status: :unprocessable_entity
       end

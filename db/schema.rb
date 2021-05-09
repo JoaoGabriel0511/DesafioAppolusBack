@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_09_144419) do
+ActiveRecord::Schema.define(version: 2021_05_09_181447) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,7 +40,9 @@ ActiveRecord::Schema.define(version: 2021_05_09_144419) do
     t.integer "transaction_type"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "trust_fund_id"
     t.index ["account_id"], name: "index_transactions_on_account_id"
+    t.index ["trust_fund_id"], name: "index_transactions_on_trust_fund_id"
   end
 
   create_table "trust_funds", force: :cascade do |t|

@@ -2,11 +2,16 @@ require 'rails_helper'
 
 RSpec.describe "Account", type: :request do
 
+  before do
+    @user = User.create(name: "jhon", email: "jhon@email.com", password: "12345678", password_confirmation: "12345678")
+    @account = Account.create(user_id: @user.id, balance: 500.0)
+    post '/api/v1/auth', params: {email: "jhon@email.com", password: "12345678"}
+    @token = JSON.parse(response.body)["token"]
+  end
+
   describe 'Get /index' do
 
     before do
-      user = User.create(name: "jhon", email: "jhon@email.com", password: "12345678", password_confirmation: "12345678")
-      @account = Account.create(user_id: user.id, balance: 500.0)
       10.times do |it|
         if(it.odd?)
           Transaction.create(transaction_type: Transaction.transaction_types[:WITHDRAW], account_id: @account.id, value: 0.0, balance: @account.balance)
@@ -14,8 +19,6 @@ RSpec.describe "Account", type: :request do
           Transaction.create(transaction_type: Transaction.transaction_types[:DEPOSIT], account_id: @account.id, value: 0.0, balance: @account.balance)
         end
       end
-      post '/api/v1/auth', params: {email: "jhon@email.com", password: "12345678"}
-      @token = JSON.parse(response.body)["token"]
     end
 
     it "return http success and the user data when the token is valid" do
@@ -75,6 +78,20 @@ RSpec.describe "Account", type: :request do
       expect(response).to have_http_status(:not_acceptable)
       error = JSON.parse(response.body)["error"]
       expect(error).to eq "User can`t withdraw a value greater than the balance"
+    end
+
+  end
+
+  describe "GET /account_investments" do
+
+    before do
+      @trust_fund = TrustFund.create(name: "Tesouro Selic", fund_type: TrustFund.fund_types[:STOCK], user: @user)
+      @investment = Investment.create(account: @account, trust_fund: @trust_fund, value: 400.0)
+    end
+
+    it "returns all of the account investments" do
+      get '/api/v1/account/investments', headers: {"Authorization"  => @token}
+      expect(response).to have_http_status(:success)
     end
 
   end
