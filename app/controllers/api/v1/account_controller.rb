@@ -30,6 +30,11 @@ class Api::V1::AccountController < ApiController
     render json: {data: {account_statement: account_statement}, message: "Account statement recovered"}, status: :ok
   end
 
+  def account_investments
+    investments = Investment.where(account_id: @userAccount[:account].id)
+    render json: {data: {account: @userAccount[:account], investments: investments.map{|investment| return { investment: investment, trust_fund: investment.trust_fund } } }}, status: :ok
+  end
+
   private
     def set_user
       @userAccount = helpers.recoverCurrentUserAccount(request)
