@@ -30,7 +30,7 @@ RSpec.describe "TrustFunds", type: :request do
 
   describe "POST /create" do
 
-    it "returns http success with the trust_fund attributes when creating a valid user" do
+    it "returns http success with the trust_fund attributes when creating with a valid user" do
       post '/api/v1/trust_fund', params: {trust_fund: {name: "Tesouro Selic", fund_type: "STOCK"}} , headers: {"Authorization"  => @token}
       data = JSON.parse(response.body)["data"]
       message = JSON.parse(response.body)["message"]
