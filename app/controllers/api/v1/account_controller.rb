@@ -32,7 +32,7 @@ class Api::V1::AccountController < ApiController
 
   def account_investments
     investments = Investment.where(account_id: @userAccount[:account].id)
-    render json: {data: {account: @userAccount[:account], investments: investments.map{|investment| return { investment: investment, trust_fund: investment.trust_fund } } }}, status: :ok
+    render json: {data: {account: @userAccount[:account], investments: investments.map{|i| {investment: i, trust_fund: i.trust_fund}} }}, status: :ok
   end
 
   private

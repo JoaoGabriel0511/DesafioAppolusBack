@@ -85,13 +85,28 @@ RSpec.describe "Account", type: :request do
   describe "GET /account_investments" do
 
     before do
-      @trust_fund = TrustFund.create(name: "Tesouro Selic", fund_type: TrustFund.fund_types[:STOCK], user: @user)
-      @investment = Investment.create(account: @account, trust_fund: @trust_fund, value: 400.0)
+      @trust_fund1 = TrustFund.create(name: "Tesouro Selic", fund_type: TrustFund.fund_types[:STOCK], user: @user)
+      @investment1 = Investment.create(account: @account, trust_fund: @trust_fund1, value: 400.0)
+      @trust_fund2 = TrustFund.create(name: "Tesouro", fund_type: TrustFund.fund_types[:FUND], user: @user)
+      @investment2 = Investment.create(account: @account, trust_fund: @trust_fund2, value: 200.0)
     end
 
     it "returns all of the account investments" do
       get '/api/v1/account/investments', headers: {"Authorization"  => @token}
+      data = JSON.parse(response.body)["data"]
       expect(response).to have_http_status(:success)
+      expect(data['account']['id']).to eq(@account.id)
+      expect(data['investments']).to have_attributes(size: 2)
+      expect(data['investments'][0]['investment']['id']).to eq(@investment1.id)
+      expect(data['investments'][0]['investment']['value']).to eq(400.0)
+      expect(data['investments'][0]['trust_fund']['name']).to eq("Tesouro Selic")
+      expect(data['investments'][0]['trust_fund']['fund_type']).to eq("STOCK")
+      expect(data['investments'][0]['trust_fund']['fund_value']).to eq(0.0)
+      expect(data['investments'][1]['investment']['id']).to eq(@investment2.id)
+      expect(data['investments'][1]['investment']['value']).to eq(200.0)
+      expect(data['investments'][1]['trust_fund']['name']).to eq("Tesouro")
+      expect(data['investments'][1]['trust_fund']['fund_type']).to eq("FUND")
+      expect(data['investments'][1]['trust_fund']['fund_value']).to eq(0.0)
     end
 
   end
