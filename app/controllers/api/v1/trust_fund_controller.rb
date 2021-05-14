@@ -5,7 +5,7 @@ class Api::V1::TrustFundController < ApplicationController
 
   def index
     trust_funds = TrustFund.all
-    render json: {data: {trust_funds: trust_funds}, message: "trust funds recovered"}, status: :ok
+    render json: {data: {trust_funds: trust_funds.map{|fund| {fund: fund, investmentsTotal: fund.totalInvestments}}}, message: "trust funds recovered"}, status: :ok
   end
 
   def create

@@ -35,6 +35,11 @@ class Api::V1::AccountController < ApiController
     render json: {data: {account: @userAccount[:account], investments: investments.map{|i| {investment: i, trust_fund: i.trust_fund}} }}, status: :ok
   end
 
+  def account_investment
+    investment = Investment.find_by(account_id: @userAccount[:account].id, trust_fund_id: params[:trust_fund_id])
+    render json: {data: {investment: investment}}, status: :ok
+  end
+
   private
     def set_user
       @userAccount = helpers.recoverCurrentUserAccount(request)

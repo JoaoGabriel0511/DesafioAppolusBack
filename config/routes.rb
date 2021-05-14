@@ -16,6 +16,7 @@ Rails.application.routes.draw do
       post '/trust_fund/invest' => 'trust_fund#invest_value'
       post '/trust_fund/withdraw' => 'trust_fund#withdraw_value'
       get '/account/investments' => 'account#account_investments'
+      get '/account/investment/:trust_fund_id' => 'account#account_investment'
     end
   end
 end
