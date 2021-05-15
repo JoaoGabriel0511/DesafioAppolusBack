@@ -27,6 +27,13 @@ class Api::V1::AccountController < ApiController
 
   def account_statement
     account_statement = Transaction.where(account_id: @userAccount[:account].id).order('transactions.created_at')
+    account_statement = account_statement.map do |trasaction|
+      if trasaction.trust_fund_id
+        {statement: trasaction, trust_fund: TrustFund.find(trasaction.trust_fund_id).name}
+      else
+        {statement: trasaction, trust_fund: "-"}
+      end
+    end
     render json: {data: {account_statement: account_statement}, message: "Account statement recovered"}, status: :ok
   end
 
