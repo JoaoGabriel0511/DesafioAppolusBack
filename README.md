@@ -5,20 +5,15 @@ application up and running.
 
 Things you may want to cover:
 
-* Ruby version
+* Ruby Version: 3.0.0
 
-* System dependencies
+* Rails Version: 6.1.3
 
-* Configuration
+* Database initialization: rails db:migrate
 
-* Database creation
+* Install dependencies: bundle install
 
-* Database initialization
+* Running localhost: rails s
 
-* How to run the test suite
+* Running tests: rspec
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
