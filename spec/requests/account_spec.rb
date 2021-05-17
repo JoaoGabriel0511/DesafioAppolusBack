@@ -111,21 +111,4 @@ RSpec.describe "Account", type: :request do
 
   end
 
-  describe "GET /account_investment" do
-
-    before do
-      @trust_fund = TrustFund.create(name: "Tesouro Selic", fund_type: TrustFund.fund_types[:STOCK], user: @user)
-      @investment = Investment.create(account: @account, trust_fund: @trust_fund, value: 400.0)
-    end
-
-    it "returns the account investments in the trust_fund" do
-      get '/api/v1/account/investment', headers: {"Authorization"  => @token}, params: {trust_fund_id: @trust_fund.id}
-      data = JSON.parse(response.body)["data"]
-      expect(response).to have_http_status(:success)
-      expect(data['investment']['id']).to eq(@investment.id)
-      expect(data['investment']['value']).to eq(400.0)
-    end
-
-  end
-
 end
