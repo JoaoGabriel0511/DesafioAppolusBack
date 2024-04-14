@@ -74,6 +74,10 @@ GEM
       responders
       warden (~> 1.2.3)
     diff-lcs (1.4.4)
+    dotenv (3.1.0)
+    dotenv-rails (3.1.0)
+      dotenv (= 3.1.0)
+      railties (>= 6.1)
     erubi (1.10.0)
     ffi (1.15.0)
     globalid (0.4.2)
@@ -184,6 +188,7 @@ DEPENDENCIES
   bootsnap (>= 1.4.4)
   byebug
   devise
+  dotenv-rails
   groupdate (~> 2.5, >= 2.5.2)
   jwt
   listen (~> 3.3)
